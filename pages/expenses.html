@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expenses - Travel Budget Tracker</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #3498db;
+            --secondary: #2ecc71;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #27ae60;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 0.9rem;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 25px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        /* Page Header */
+        .page-header {
+            padding: 30px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .page-header h1 {
+            color: var(--dark);
+            font-size: 2rem;
+        }
+        
+        /* Stats Section */
+        .stats-section {
+            padding: 20px 0;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value.total {
+            color: var(--primary);
+        }
+        
+        .stat-value.average {
+            color: var(--secondary);
+        }
+        
+        .stat-value.highest {
+            color: var(--warning);
+        }
+        
+        .stat-value.count {
+            color: var(--dark);
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        /* Expenses Section */
+        .expenses-section {
+            padding: 20px 0 50px;
+        }
+        
+        .filters {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        .filter-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .filter-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        .expenses-table-container {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+        
+        .expenses-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .expenses-table thead {
+            background: var(--light);
+        }
+        
+        .expenses-table th {
+            padding: 15px 20px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--dark);
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .expenses-table td {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .expenses-table tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .expenses-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .category-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .category-accommodation {
+            background-color: rgba(52, 152, 219, 0.1);
+            color: var(--primary);
+        }
+        
+        .category-food {
+            background-color: rgba(46, 204, 113, 0.1);
+            color: var(--secondary);
+        }
+        
+        .category-transportation {
+            background-color: rgba(231, 76, 60, 0.1);
+            color: var(--danger);
+        }
+        
+        .category-activities {
+            background-color: rgba(243, 156, 18, 0.1);
+            color: var(--warning);
+        }
+        
+        .category-shopping {
+            background-color: rgba(155, 89, 182, 0.1);
+            color: #9b59b6;
+        }
+        
+        .category-flights {
+            background-color: rgba(26, 188, 156, 0.1);
+            color: #1abc9c;
+        }
+        
+        .category-other {
+            background-color: rgba(149, 165, 166, 0.1);
+            color: #95a5a6;
+        }
+        
+        .amount-cell {
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .table-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .empty-state h3 {
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+        
+        .empty-state p {
+            color: #666;
+            margin-bottom: 25px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        .pagination-btn {
+            padding: 8px 15px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .pagination-btn:hover:not(.disabled) {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .pagination-btn.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .pagination-info {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 50px 0 20px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--light);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #bdc3c7;
+            font-size: 0.9rem;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h3 {
+            color: var(--dark);
+        }
+        
+        .modal-body {
+            padding: 20px;
+        }
+        
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                margin-top: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .nav-links li {
+                margin: 5px 10px;
+            }
+            
+            .page-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .filter-row {
+                flex-direction: column;
+            }
+            
+            .expenses-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .table-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="../index.html" class="logo">TravelBudget</a>
+                <ul class="nav-links">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="trips.html">Trips</a></li>
+                    <li><a href="expenses.html" class="active">Expenses</a></li>
+                    <li><a href="itinerary.html">Itinerary</a></li>
+                    <li><a href="reports.html">Reports</a></li>
+                    <li><a href="about.html">About</a></li>
+                </ul>
+                <div class="auth-buttons" id="authButtons">
+                    <!-- Dynamically populated -->
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Expense Tracking</h1>
+            <a href="add-expense.html" class="btn btn-secondary">Add New Expense</a>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value total" id="totalExpenses">$0</div>
+                    <div class="stat-label">Total Expenses</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value average" id="averageExpense">$0</div>
+                    <div class="stat-label">Average Expense</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value highest" id="highestExpense">$0</div>
+                    <div class="stat-label">Highest Expense</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value count" id="expenseCount">0</div>
+                    <div class="stat-label">Total Items</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Expenses Section -->
+    <section class="expenses-section">
+        <div class="container">
+            <div class="filters">
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label for="tripFilter">Filter by Trip</label>
+                        <select id="tripFilter" class="form-control">
+                            <option value="">All Trips</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="categoryFilter">Filter by Category</label>
+                        <select id="categoryFilter" class="form-control">
+                            <option value="">All Categories</option>
+                            <option value="accommodation">Accommodation</option>
+                            <option value="food">Food & Dining</option>
+                            <option value="transportation">Transportation</option>
+                            <option value="activities">Activities</option>
+                            <option value="shopping">Shopping</option>
+                            <option value="flights">Flights</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="dateFrom">Date From</label>
+                        <input type="date" id="dateFrom" class="form-control">
+                    </div>
+                    <div class="filter-group">
+                        <label for="dateTo">Date To</label>
+                        <input type="date" id="dateTo" class="form-control">
+                    </div>
+                </div>
+                <div style="margin-top: 15px; display: flex; gap: 10px;">
+                    <button class="btn btn-small" onclick="applyFilters()">Apply Filters</button>
+                    <button class="btn btn-small" onclick="clearFilters()">Clear Filters</button>
+                </div>
+            </div>
+            
+            <div class="expenses-table-container">
+                <table class="expenses-table" id="expensesTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Category</th>
+                            <th>Trip</th>
+                            <th>Amount</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="expensesTableBody">
+                        <!-- Expenses will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <h3>No Expenses Found</h3>
+                <p>You haven't added any expenses yet. Start tracking your travel spending by adding your first expense.</p>
+                <a href="add-expense.html" class="btn btn-secondary">Add Your First Expense</a>
+            </div>
+            
+            <div class="pagination" id="pagination" style="display: none;">
+                <button class="pagination-btn" id="prevPage" onclick="changePage(-1)">Previous</button>
+                <span class="pagination-info" id="pageInfo">Page 1 of 1</span>
+                <button class="pagination-btn" id="nextPage" onclick="changePage(1)">Next</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Edit Expense Modal -->
+    <div class="modal" id="editExpenseModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Expense</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editExpenseForm">
+                    <input type="hidden" id="editExpenseId">
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label for="editCategory">Category *</label>
+                        <select id="editCategory" class="form-control" required>
+                            <option value="">Select a category</option>
+                            <option value="accommodation">Accommodation</option>
+                            <option value="food">Food & Dining</option>
+                            <option value="transportation">Transportation</option>
+                            <option value="activities">Activities & Entertainment</option>
+                            <option value="shopping">Shopping</option>
+                            <option value="flights">Flights</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label for="editAmount">Amount ($) *</label>
+                        <input type="number" id="editAmount" class="form-control" min="0" step="0.01" required>
+                    </div>
+                    
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label for="editDate">Date *</label>
+                        <input type="date" id="editDate" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label for="editDescription">Description</label>
+                        <input type="text" id="editDescription" class="form-control">
+                    </div>
+                    
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label for="editNotes">Notes</label>
+                        <textarea id="editNotes" class="form-control" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-secondary" onclick="saveExpenseChanges()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>TravelBudget</h3>
+                    <p>Your ultimate travel budget tracking companion. Plan smarter, travel better.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="gallery.html">Gallery</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Features</h3>
+                    <ul class="footer-links">
+                        <li><a href="trips.html">Trip Management</a></li>
+                        <li><a href="expenses.html">Expense Tracking</a></li>
+                        <li><a href="reports.html">Reports</a></li>
+                        <li><a href="budget.html">Budget Planning</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Legal</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="sitemap.html">Sitemap</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 TravelBudget. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Global variables for pagination
+        let currentPage = 1;
+        let itemsPerPage = 10;
+        let filteredExpenses = [];
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Update navigation buttons
+            const authButtons = document.getElementById('authButtons');
+            authButtons.innerHTML = `
+                <a href="dashboard.html" class="btn">Dashboard</a>
+                <a href="profile.html" class="btn">Profile</a>
+                <a href="logout.html" class="btn btn-secondary">Logout</a>
+            `;
+            
+            // Load user's trips for filter
+            loadTripFilter();
+            
+            // Load and display expenses
+            loadExpenses();
+            
+            // Set today's date as default for date filters
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('dateTo').value = today;
+            
+            // Set date from to 30 days ago
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+            document.getElementById('dateFrom').value = thirtyDaysAgo.toISOString().split('T')[0];
+            
+            // Add event listeners for filters
+            document.getElementById('tripFilter').addEventListener('change', applyFilters);
+            document.getElementById('categoryFilter').addEventListener('change', applyFilters);
+            document.getElementById('dateFrom').addEventListener('change', applyFilters);
+            document.getElementById('dateTo').addEventListener('change', applyFilters);
+        });
+        
+        function loadTripFilter() {
+            const trips = JSON.parse(localStorage.getItem('trips')) || [];
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            const userTrips = trips.filter(trip => trip.userId === user.id);
+            
+            const tripFilter = document.getElementById('tripFilter');
+            tripFilter.innerHTML = '<option value="">All Trips</option>' + 
+                userTrips.map(trip => `<option value="${trip.id}">${trip.name}</option>`).join('');
+        }
+        
+        function loadExpenses() {
+            const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+            const trips = JSON.parse(localStorage.getItem('trips')) || [];
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            
+            // Filter expenses by user's trips
+            const userTripIds = trips.filter(trip => trip.userId === user.id).map(trip => trip.id);
+            filteredExpenses = expenses.filter(expense => userTripIds.includes(expense.tripId));
+            
+            // Apply initial filters
+            applyFilters();
+        }
+        
+        function applyFilters() {
+            const tripFilter = document.getElementById('tripFilter').value;
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const dateFrom = document.getElementById('dateFrom').value;
+            const dateTo = document.getElementById('dateTo').value;
+            
+            const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+            const trips = JSON.parse(localStorage.getItem('trips')) || [];
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            
+            // Start with all expenses from user's trips
+            const userTripIds = trips.filter(trip => trip.userId === user.id).map(trip => trip.id);
+            let filtered = expenses.filter(expense => userTripIds.includes(expense.tripId));
+            
+            // Apply trip filter
+            if (tripFilter) {
+                filtered = filtered.filter(expense => expense.tripId === parseInt(tripFilter));
+            }
+            
+            // Apply category filter
+            if (categoryFilter) {
+                filtered = filtered.filter(expense => expense.category === categoryFilter);
+            }
+            
+            // Apply date filters
+            if (dateFrom) {
+                filtered = filtered.filter(expense => new Date(expense.date) >= new Date(dateFrom));
+            }
+            
+            if (dateTo) {
+                const toDate = new Date(dateTo);
+                toDate.setHours(23, 59, 59); // Include entire day
+                filtered = filtered.filter(expense => new Date(expense.date) <= toDate);
+            }
+            
+            // Sort by date (newest first)
+            filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            filteredExpenses = filtered;
+            currentPage = 1; // Reset to first page
+            updateStatistics();
+            renderExpensesTable();
+        }
+        
+        function clearFilters() {
+            document.getElementById('tripFilter').value = '';
+            document.getElementById('categoryFilter').value = '';
+            
+            // Set default dates (last 30 days)
+            const today = new Date().toISOString().split('T')[0];
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+            
+            document.getElementById('dateFrom').value = thirtyDaysAgo.toISOString().split('T')[0];
+            document.getElementById('dateTo').value = today;
+            
+            applyFilters();
+        }
+        
+        function updateStatistics() {
+            if (filteredExpenses.length === 0) {
+                document.getElementById('totalExpenses').textContent = '$0';
+                document.getElementById('averageExpense').textContent = '$0';
+                document.getElementById('highestExpense').textContent = '$0';
+                document.getElementById('expenseCount').textContent = '0';
+                return;
+            }
+            
+            const total = filteredExpenses.reduce((sum, expense) => sum + parseFloat(expense.amount), 0);
+            const average = total / filteredExpenses.length;
+            const highest = Math.max(...filteredExpenses.map(expense => parseFloat(expense.amount)));
+            
+            document.getElementById('totalExpenses').textContent = `$${total.toFixed(2)}`;
+            document.getElementById('averageExpense').textContent = `$${average.toFixed(2)}`;
+            document.getElementById('highestExpense').textContent = `$${highest.toFixed(2)}`;
+            document.getElementById('expenseCount').textContent = filteredExpenses.length;
+        }
+        
+        function renderExpensesTable() {
+            const tableBody = document.getElementById('expensesTableBody');
+            const emptyState = document.getElementById('emptyState');
+            const pagination = document.getElementById('pagination');
+            
+            if (filteredExpenses.length === 0) {
+                tableBody.innerHTML = '';
+                emptyState.style.display = 'block';
+                pagination.style.display = 'none';
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            
+            // Calculate pagination
+            const totalPages = Math.ceil(filteredExpenses.length / itemsPerPage);
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = Math.min(startIndex + itemsPerPage, filteredExpenses.length);
+            const pageExpenses = filteredExpenses.slice(startIndex, endIndex);
+            
+            // Get trip names for display
+            const trips = JSON.parse(localStorage.getItem('trips')) || [];
+            
+            tableBody.innerHTML = pageExpenses.map(expense => {
+                const trip = trips.find(t => t.id === expense.tripId);
+                const categoryClass = `category-${expense.category}`;
+                const categoryName = getCategoryDisplayName(expense.category);
+                const formattedDate = formatDate(expense.date);
+                
+                return `
+                    <tr>
+                        <td>${formattedDate}</td>
+                        <td>${expense.description || 'No description'}</td>
+                        <td><span class="category-badge ${categoryClass}">${categoryName}</span></td>
+                        <td>${trip ? trip.name : 'Unknown Trip'}</td>
+                        <td class="amount-cell">$${parseFloat(expense.amount).toFixed(2)}</td>
+                        <td>
+                            <div class="table-actions">
+                                <button class="btn btn-small" onclick="editExpense(${expense.id})">Edit</button>
+                                <button class="btn btn-small btn-danger" onclick="deleteExpense(${expense.id})">Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            
+            // Update pagination
+            if (totalPages > 1) {
+                pagination.style.display = 'flex';
+                document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
+                
+                document.getElementById('prevPage').disabled = currentPage === 1;
+                document.getElementById('prevPage').className = currentPage === 1 ? 
+                    'pagination-btn disabled' : 'pagination-btn';
+                
+                document.getElementById('nextPage').disabled = currentPage === totalPages;
+                document.getElementById('nextPage').className = currentPage === totalPages ? 
+                    'pagination-btn disabled' : 'pagination-btn';
+            } else {
+                pagination.style.display = 'none';
+            }
+        }
+        
+        function changePage(direction) {
+            const totalPages = Math.ceil(filteredExpenses.length / itemsPerPage);
+            const newPage = currentPage + direction;
+            
+            if (newPage >= 1 && newPage <= totalPages) {
+                currentPage = newPage;
+                renderExpensesTable();
+            }
+        }
+        
+        function editExpense(expenseId) {
+            const expense = filteredExpenses.find(e => e.id === expenseId);
+            if (!expense) return;
+            
+            document.getElementById('editExpenseId').value = expense.id;
+            document.getElementById('editCategory').value = expense.category;
+            document.getElementById('editAmount').value = expense.amount;
+            document.getElementById('editDate').value = expense.date;
+            document.getElementById('editDescription').value = expense.description || '';
+            document.getElementById('editNotes').value = expense.notes || '';
+            
+            document.getElementById('editExpenseModal').style.display = 'flex';
+        }
+        
+        function closeModal() {
+            document.getElementById('editExpenseModal').style.display = 'none';
+        }
+        
+        function saveExpenseChanges() {
+            const expenseId = parseInt(document.getElementById('editExpenseId').value);
+            const category = document.getElementById('editCategory').value;
+            const amount = parseFloat(document.getElementById('editAmount').value);
+            const date = document.getElementById('editDate').value;
+            const description = document.getElementById('editDescription').value;
+            const notes = document.getElementById('editNotes').value;
+            
+            if (!category || !amount || !date) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            
+            // Update expense in localStorage
+            let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+            const expenseIndex = expenses.findIndex(e => e.id === expenseId);
+            
+            if (expenseIndex !== -1) {
+                expenses[expenseIndex] = {
+                    ...expenses[expenseIndex],
+                    category,
+                    amount,
+                    date,
+                    description,
+                    notes,
+                    updatedAt: new Date().toISOString()
+                };
+                
+                localStorage.setItem('expenses', JSON.stringify(expenses));
+                
+                // Update filtered expenses
+                const filteredIndex = filteredExpenses.findIndex(e => e.id === expenseId);
+                if (filteredIndex !== -1) {
+                    filteredExpenses[filteredIndex] = expenses[expenseIndex];
+                }
+                
+                // Update display
+                updateStatistics();
+                renderExpensesTable();
+                
+                closeModal();
+                alert('Expense updated successfully!');
+            }
+        }
+        
+        function deleteExpense(expenseId) {
+            if (!confirm('Are you sure you want to delete this expense? This action cannot be undone.')) {
+                return;
+            }
+            
+            // Remove expense from localStorage
+            let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+            expenses = expenses.filter(e => e.id !== expenseId);
+            localStorage.setItem('expenses', JSON.stringify(expenses));
+            
+            // Remove from filtered expenses
+            filteredExpenses = filteredExpenses.filter(e => e.id !== expenseId);
+            
+            // Update display
+            updateStatistics();
+            renderExpensesTable();
+            
+            alert('Expense deleted successfully!');
+        }
+        
+        function getCategoryDisplayName(category) {
+            const names = {
+                'accommodation': 'Accommodation',
+                'food': 'Food & Dining',
+                'transportation': 'Transportation',
+                'activities': 'Activities',
+                'shopping': 'Shopping',
+                'flights': 'Flights',
+                'other': 'Other'
+            };
+            return names[category] || category;
+        }
+        
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
+    </script>
+</body>
+</html>

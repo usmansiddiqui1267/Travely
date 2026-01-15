@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sitemap - Travel Budget Tracker</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #3498db;
+            --secondary: #2ecc71;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #27ae60;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 25px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        /* Page Header */
+        .page-header {
+            padding: 40px 0;
+        }
+        
+        .page-header h1 {
+            color: var(--dark);
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .page-header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        
+        /* Sitemap Section */
+        .sitemap-section {
+            padding: 40px 0 80px;
+        }
+        
+        .sitemap-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+        
+        .sitemap-category {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        .category-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .category-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+        
+        .category-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .sitemap-links {
+            list-style: none;
+        }
+        
+        .sitemap-links li {
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .sitemap-links li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .sitemap-links a {
+            color: #555;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: block;
+            padding: 5px 0;
+        }
+        
+        .sitemap-links a:hover {
+            color: var(--primary);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 50px 0 20px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--light);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #bdc3c7;
+            font-size: 0.9rem;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                margin-top: 15px;
+            }
+            
+            .sitemap-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="../index.html" class="logo">TravelBudget</a>
+                <ul class="nav-links">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="trips.html">Trips</a></li>
+                    <li><a href="expenses.html">Expenses</a></li>
+                    <li><a href="reports.html">Reports</a></li>
+                    <li><a href="about.html">About</a></li>
+                </ul>
+                <div class="auth-buttons" id="authButtons">
+                    <!-- Dynamically populated -->
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Website Sitemap</h1>
+            <p>Complete overview of all pages and features available in TravelBudget</p>
+        </div>
+    </section>
+
+    <!-- Sitemap Section -->
+    <section class="sitemap-section">
+        <div class="container">
+            <div class="sitemap-container">
+                <!-- Main Pages -->
+                <div class="sitemap-category">
+                    <div class="category-header">
+                        <div class="category-icon">🏠</div>
+                        <div class="category-title">Main Pages</div>
+                    </div>
+                    <ul class="sitemap-links">
+                        <li><a href="../index.html">Home Page</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="gallery.html">Travel Gallery</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="sitemap.html">Sitemap</a></li>
+                    </ul>
+                </div>
+                
+                <!-- User Authentication -->
+                <div class="sitemap-category">
+                    <div class="category-header">
+                        <div class="category-icon">👤</div>
+                        <div class="category-title">User Authentication</div>
+                    </div>
+                    <ul class="sitemap-links">
+                        <li><a href="register.html">User Registration</a></li>
+                        <li><a href="login.html">User Login</a></li>
+                        <li><a href="profile.html">User Profile</a></li>
+                        <li><a href="logout.html">Logout</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Trip Management -->
+                <div class="sitemap-category">
+                    <div class="category-header">
+                        <div class="category-icon">🗺️</div>
+                        <div class="category-title">Trip Management</div>
+                    </div>
+                    <ul class="sitemap-links">
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="trips.html">Trip List</a></li>
+                        <li><a href="create-trip.html">Create New Trip</a></li>
+                        <li><a href="trip-details.html">Trip Details</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Itinerary Management -->
+                <div class="sitemap-category">
+                    <div class="category-header">
+                        <div class="category-icon">📅</div>
+                        <div class="category-title">Itinerary Management</div>
+                    </div>
+                    <ul class="sitemap-links">
+                        <li><a href="itinerary.html">Itinerary List</a></li>
+                        <li><a href="add-itinerary.html">Add Itinerary Item</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Expense Tracking -->
+                <div class="sitemap-category">
+                    <div class="category-header">
+                        <div class="category-icon">💰</div>
+                        <div class="category-title">Expense Tracking</div>
+                    </div>
+                    <ul class="sitemap-links">
+                        <li><a href="expenses.html">Expense List</a></li>
+                        <li><a href="add-expense.html">Add Expense</a></li>
+                        <li><a href="budget.html">Budget Management</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Reports & Analytics -->
+                <div class="sitemap-category">
+                    <div class="category-header">
+                        <div class="category-icon">📊</div>
+                        <div class="category-title">Reports & Analytics</div>
+                    </div>
+                    <ul class="sitemap-links">
+                        <li><a href="reports.html">Expense Reports</a></li>
+                        <li><a href="reports.html">Budget Analysis</a></li>
+                        <li><a href="reports.html">Spending Trends</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Site Structure -->
+            <div style="margin-top: 60px; background: white; border-radius: 8px; padding: 30px; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
+                <h2 style="color: var(--dark); margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 15px;">Complete Site Structure</h2>
+                
+                <div style="line-height: 1.8;">
+                    <h3 style="color: var(--primary); margin: 25px 0 15px;">1. Home (index.html)</h3>
+                    <ul style="list-style: none; padding-left: 20px;">
+                        <li>• Hero Banner with overview of features</li>
+                        <li>• Links to Login / Register</li>
+                        <li>• Quick links to Trips, About, Gallery</li>
+                        <li>• Footer with navigation</li>
+                    </ul>
+                    
+                    <h3 style="color: var(--primary); margin: 25px 0 15px;">2. User Module</h3>
+                    <ul style="list-style: none; padding-left: 20px;">
+                        <li>• 2.1 Registration (/pages/register.html)</li>
+                        <li>• 2.2 Login (/pages/login.html)</li>
+                        <li>• 2.3 Profile (/pages/profile.html)</li>
+                    </ul>
+                    
+                    <h3 style="color: var(--primary); margin: 25px 0 15px;">3. Dashboard (/pages/dashboard.html)</h3>
+                    <ul style="list-style: none; padding-left: 20px;">
+                        <li>• Welcome message</li>
+                        <li>• Current trip preview</li>
+                        <li>• Remaining budget</li>
+                        <li>• Recent expenses</li>
+                        <li>• Shortcuts to key features</li>
+                    </ul>
+                    
+                    <h3 style="color: var(--primary); margin: 25px 0 15px;">4. Trip Management</h3>
+                    <ul style="list-style: none; padding-left: 20px;">
+                        <li>• 4.1 Trip List (/pages/trips.html)</li>
+                        <li>• 4.2 Create Trip (/pages/create-trip.html)</li>
+                        <li>• 4.3 Trip Details (/pages/trip-details.html)</li>
+                    </ul>
+                    
+                    <h3 style="color: var(--primary); margin: 25px 0 15px;">5. Itinerary Management</h3>
+                    <ul style="list-style: none; padding-left: 20px;">
+                        <li>• 5.1 Add Itinerary Item (/pages/add-itinerary.html)</li>
+                        <li>• 5.2 Itinerary List (/pages/itinerary.html)</li>
+                    </ul>
+                    
+                    <h3 style="color: var(--primary); margin: 25px 0 15px;">6. Expense Tracking</h3>
+                    <ul style="list-style: none; padding-left: 20px;">
+                        <li>• 6.1 Add Expense (/pages/add-expense.html)</li>
+                        <li>• 6.2 Expense List (/pages/expenses.html)</li>
+                        <li>• 6.3 Budget Management (/pages/budget.html)</li>
+                    </ul>
+                    
+                    <h3 style="color: var(--primary); margin: 25px 0 15px;">7. Reports</h3>
+                    <ul style="list-style: none; padding-left: 20px;">
+                        <li>• 7.1 Expense Summary (/pages/reports.html)</li>
+                        <li>• 7.2 Download Report (Optional)</li>
+                    </ul>
+                    
+                    <h3 style="color: var(--primary); margin: 25px 0 15px;">8. Other Static Pages</h3>
+                    <ul style="list-style: none; padding-left: 20px;">
+                        <li>• 8.1 About Us (/pages/about.html)</li>
+                        <li>• 8.2 Image Gallery (/pages/gallery.html)</li>
+                        <li>• 8.3 Contact Us (/pages/contact.html)</li>
+                        <li>• 8.4 Sitemap (/pages/sitemap.html)</li>
+                    </ul>
+                    
+                    <h3 style="color: var(--primary); margin: 25px 0 15px;">9. Utility Pages</h3>
+                    <ul style="list-style: none; padding-left: 20px;">
+                        <li>• 9.1 Error Page (/pages/404.html)</li>
+                        <li>• 9.2 Logout (/pages/logout.html)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>TravelBudget</h3>
+                    <p>Your ultimate travel budget tracking companion. Plan smarter, travel better.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="gallery.html">Gallery</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Features</h3>
+                    <ul class="footer-links">
+                        <li><a href="trips.html">Trip Management</a></li>
+                        <li><a href="expenses.html">Expense Tracking</a></li>
+                        <li><a href="reports.html">Reports</a></li>
+                        <li><a href="budget.html">Budget Planning</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Legal</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="sitemap.html">Sitemap</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 TravelBudget. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in to update navigation
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            const authButtons = document.getElementById('authButtons');
+            
+            if (user) {
+                authButtons.innerHTML = `
+                    <a href="dashboard.html" class="btn">Dashboard</a>
+                    <a href="profile.html" class="btn">Profile</a>
+                    <a href="logout.html" class="btn btn-secondary">Logout</a>
+                `;
+            } else {
+                authButtons.innerHTML = `
+                    <a href="login.html" class="btn">Login</a>
+                    <a href="register.html" class="btn btn-secondary">Register</a>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

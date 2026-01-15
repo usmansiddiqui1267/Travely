@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Itinerary Item - Travel Budget Tracker</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #3498db;
+            --secondary: #2ecc71;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #27ae60;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 25px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        /* Page Header */
+        .page-header {
+            padding: 30px 0;
+        }
+        
+        .page-header h1 {
+            color: var(--dark);
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .page-header p {
+            color: #666;
+        }
+        
+        /* Form Section */
+        .form-section {
+            padding: 20px 0 50px;
+        }
+        
+        .form-container {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        /* Trip Selector */
+        .trip-selector {
+            background: var(--light);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .trip-selector h3 {
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        .trip-option {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .trip-option:hover {
+            background-color: rgba(255,255,255,0.5);
+        }
+        
+        .trip-option input {
+            margin-right: 10px;
+        }
+        
+        .trip-info {
+            flex: 1;
+        }
+        
+        .trip-name {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .trip-dates {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 30px 0 20px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--light);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #bdc3c7;
+            font-size: 0.9rem;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                margin-top: 15px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="../index.html" class="logo">TravelBudget</a>
+                <ul class="nav-links">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="trips.html">Trips</a></li>
+                    <li><a href="itinerary.html">Itinerary</a></li>
+                    <li><a href="expenses.html">Expenses</a></li>
+                    <li><a href="about.html">About</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <a href="profile.html" class="btn">Profile</a>
+                    <a href="logout.html" class="btn btn-secondary">Logout</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Add Itinerary Item</h1>
+            <p>Plan your trip activities, flights, accommodations, and transportation.</p>
+        </div>
+    </section>
+
+    <!-- Form Section -->
+    <section class="form-section">
+        <div class="container">
+            <div class="form-container">
+                <div class="trip-selector" id="tripSelector">
+                    <h3>Select Trip</h3>
+                    <!-- Trip options will be loaded here -->
+                </div>
+                
+                <form id="addItineraryForm">
+                    <div class="form-group">
+                        <label for="type">Item Type *</label>
+                        <select id="type" class="form-control" required>
+                            <option value="">Select type</option>
+                            <option value="flight">Flight</option>
+                            <option value="hotel">Hotel / Accommodation</option>
+                            <option value="activity">Activity / Sightseeing</option>
+                            <option value="transport">Transportation</option>
+                            <option value="food">Restaurant / Food</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="title">Title *</label>
+                        <input type="text" id="title" class="form-control" placeholder="e.g., Flight to Paris" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="date">Date *</label>
+                            <input type="date" id="date" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="time">Time</label>
+                            <input type="time" id="time" class="form-control">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <input type="text" id="location" class="form-control" placeholder="e.g., Charles de Gaulle Airport">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="notes">Notes</label>
+                        <textarea id="notes" class="form-control" placeholder="Any additional details..."></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-secondary">Add to Itinerary</button>
+                        <a href="itinerary.html" class="btn">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>TravelBudget</h3>
+                    <p>Your ultimate travel budget tracking companion. Plan smarter, travel better.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="gallery.html">Gallery</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Features</h3>
+                    <ul class="footer-links">
+                        <li><a href="trips.html">Trip Management</a></li>
+                        <li><a href="itinerary.html">Itinerary Planning</a></li>
+                        <li><a href="reports.html">Reports</a></li>
+                        <li><a href="budget.html">Budget Planning</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 TravelBudget. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Set default date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date').value = today;
+            
+            // Load user's trips
+            const trips = JSON.parse(localStorage.getItem('trips')) || [];
+            const userTrips = trips.filter(trip => trip.userId === user.id);
+            
+            const tripSelector = document.getElementById('tripSelector');
+            
+            if (userTrips.length === 0) {
+                tripSelector.innerHTML = `
+                    <div style="text-align: center; padding: 20px;">
+                        <p>You don't have any trips yet. Create a trip first to add itinerary items.</p>
+                        <a href="create-trip.html" class="btn btn-secondary" style="margin-top: 10px;">Create Trip</a>
+                    </div>
+                `;
+                document.getElementById('addItineraryForm').style.display = 'none';
+                return;
+            }
+            
+            // Check if tripId is provided in URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const tripIdFromUrl = parseInt(urlParams.get('tripId'));
+            
+            // Display trip options
+            tripSelector.innerHTML = `
+                <h3>Select Trip</h3>
+                ${userTrips.map(trip => `
+                    <div class="trip-option">
+                        <input type="radio" id="trip-${trip.id}" name="tripId" value="${trip.id}" 
+                               ${tripIdFromUrl === trip.id ? 'checked' : (userTrips[0].id === trip.id ? 'checked' : '')}>
+                        <label for="trip-${trip.id}" class="trip-info">
+                            <div class="trip-name">${trip.name}</div>
+                            <div class="trip-dates">${formatDate(trip.startDate)} - ${formatDate(trip.endDate)}</div>
+                        </label>
+                    </div>
+                `).join('')}
+            `;
+            
+            // Handle form submission
+            document.getElementById('addItineraryForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const selectedTrip = document.querySelector('input[name="tripId"]:checked');
+                if (!selectedTrip) {
+                    alert('Please select a trip!');
+                    return;
+                }
+                
+                const tripId = parseInt(selectedTrip.value);
+                const type = document.getElementById('type').value;
+                const title = document.getElementById('title').value;
+                const date = document.getElementById('date').value;
+                const time = document.getElementById('time').value;
+                const location = document.getElementById('location').value;
+                const notes = document.getElementById('notes').value;
+                
+                // Get existing itinerary
+                const itinerary = JSON.parse(localStorage.getItem('itinerary')) || [];
+                
+                // Create new itinerary item
+                const newItem = {
+                    id: Date.now(),
+                    tripId: tripId,
+                    type: type,
+                    title: title,
+                    date: date,
+                    time: time,
+                    location: location,
+                    notes: notes,
+                    createdAt: new Date().toISOString()
+                };
+                
+                // Add to itinerary
+                itinerary.push(newItem);
+                localStorage.setItem('itinerary', JSON.stringify(itinerary));
+                
+                alert('Itinerary item added successfully!');
+                
+                // Redirect based on where user came from
+                if (tripIdFromUrl) {
+                    window.location.href = `trip-details.html?id=${tripIdFromUrl}`;
+                } else {
+                    window.location.href = 'itinerary.html';
+                }
+            });
+            
+            function formatDate(dateString) {
+                const options = { year: 'numeric', month: 'short', day: 'numeric' };
+                return new Date(dateString).toLocaleDateString(undefined, options);
+            }
+        });
+    </script>
+</body>
+</html>

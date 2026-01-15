@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Travel Budget Tracker</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #3498db;
+            --secondary: #2ecc71;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #27ae60;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 25px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        /* Dashboard Styles */
+        .dashboard {
+            padding: 40px 0;
+        }
+        
+        .welcome-section {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        .welcome-section h1 {
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .dashboard-card {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        .dashboard-card h2 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        .current-trip {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .trip-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 8px;
+            background-color: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+        }
+        
+        .trip-info h3 {
+            margin-bottom: 5px;
+        }
+        
+        .trip-info p {
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .budget-info {
+            text-align: center;
+            padding: 20px 0;
+        }
+        
+        .budget-amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .budget-label {
+            color: #666;
+        }
+        
+        .expense-list {
+            list-style: none;
+        }
+        
+        .expense-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .expense-item:last-child {
+            border-bottom: none;
+        }
+        
+        .expense-category {
+            font-weight: 500;
+        }
+        
+        .expense-amount {
+            color: var(--danger);
+            font-weight: 600;
+        }
+        
+        .shortcuts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .shortcut-card {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .shortcut-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .shortcut-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .shortcut-card h3 {
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .shortcut-card p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 30px 0 20px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--light);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #bdc3c7;
+            font-size: 0.9rem;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                margin-top: 15px;
+            }
+            
+            .current-trip {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="../index.html" class="logo">TravelBudget</a>
+                <ul class="nav-links">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="trips.html">Trips</a></li>
+                    <li><a href="expenses.html">Expenses</a></li>
+                    <li><a href="reports.html">Reports</a></li>
+                    <li><a href="about.html">About</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <a href="profile.html" class="btn">Profile</a>
+                    <a href="logout.html" class="btn btn-secondary">Logout</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Dashboard -->
+    <section class="dashboard">
+        <div class="container">
+            <div class="welcome-section">
+                <h1>Welcome back, <span id="userName">User</span>!</h1>
+                <p>Here's an overview of your travel plans and budget.</p>
+            </div>
+            
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h2>Current Trip</h2>
+                    <div class="current-trip">
+                        <div class="trip-image">
+                            No Image
+                        </div>
+                        <div class="trip-info">
+                            <h3 id="currentTripName">No Active Trip</h3>
+                            <p id="currentTripDates">-</p>
+                            <p id="currentTripDestination">-</p>
+                            <a href="trip-details.html" class="btn" style="padding: 8px 15px;">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h2>Remaining Budget</h2>
+                    <div class="budget-info">
+                        <div class="budget-amount" id="remainingBudget">$0</div>
+                        <div class="budget-label">Available to spend</div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h2>Recent Expenses</h2>
+                    <ul class="expense-list" id="recentExpenses">
+                        <li class="expense-item">
+                            <span class="expense-category">No expenses yet</span>
+                            <span class="expense-amount">$0</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="shortcuts">
+                <div class="shortcut-card">
+                    <div class="shortcut-icon">➕</div>
+                    <h3>Create Trip</h3>
+                    <p>Start planning a new adventure</p>
+                    <a href="create-trip.html" class="btn">Create</a>
+                </div>
+                <div class="shortcut-card">
+                    <div class="shortcut-icon">💸</div>
+                    <h3>Add Expense</h3>
+                    <p>Record a new expense</p>
+                    <a href="add-expense.html" class="btn">Add</a>
+                </div>
+                <div class="shortcut-card">
+                    <div class="shortcut-icon">🗺️</div>
+                    <h3>View Trips</h3>
+                    <p>See all your trips</p>
+                    <a href="trips.html" class="btn">View</a>
+                </div>
+                <div class="shortcut-card">
+                    <div class="shortcut-icon">📊</div>
+                    <h3>Reports</h3>
+                    <p>Analyze your spending</p>
+                    <a href="reports.html" class="btn">View</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>TravelBudget</h3>
+                    <p>Your ultimate travel budget tracking companion. Plan smarter, travel better.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="gallery.html">Gallery</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Features</h3>
+                    <ul class="footer-links">
+                        <li><a href="trips.html">Trip Management</a></li>
+                        <li><a href="expenses.html">Expense Tracking</a></li>
+                        <li><a href="reports.html">Reports</a></li>
+                        <li><a href="budget.html">Budget Planning</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 TravelBudget. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Display user name
+            document.getElementById('userName').textContent = user.name;
+            
+            // Load trips and expenses
+            const trips = JSON.parse(localStorage.getItem('trips')) || [];
+            const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+            
+            // Find current trip (most recent or active)
+            const currentTrip = trips.length > 0 ? trips[trips.length - 1] : null;
+            
+            if (currentTrip) {
+                document.getElementById('currentTripName').textContent = currentTrip.name;
+                document.getElementById('currentTripDates').textContent = 
+                    `${currentTrip.startDate} to ${currentTrip.endDate}`;
+                document.getElementById('currentTripDestination').textContent = currentTrip.destination;
+                
+                // Calculate remaining budget
+                const tripExpenses = expenses.filter(e => e.tripId === currentTrip.id);
+                const totalSpent = tripExpenses.reduce((sum, expense) => sum + parseFloat(expense.amount), 0);
+                const remaining = currentTrip.budget - totalSpent;
+                
+                document.getElementById('remainingBudget').textContent = `$${remaining.toFixed(2)}`;
+                
+                // Display recent expenses
+                const recentExpensesList = document.getElementById('recentExpenses');
+                recentExpensesList.innerHTML = '';
+                
+                const recentExpenses = tripExpenses.slice(-5).reverse();
+                
+                if (recentExpenses.length === 0) {
+                    recentExpensesList.innerHTML = `
+                        <li class="expense-item">
+                            <span class="expense-category">No expenses yet</span>
+                            <span class="expense-amount">$0</span>
+                        </li>
+                    `;
+                } else {
+                    recentExpenses.forEach(expense => {
+                        const item = document.createElement('li');
+                        item.className = 'expense-item';
+                        item.innerHTML = `
+                            <span class="expense-category">${expense.category}</span>
+                            <span class="expense-amount">$${parseFloat(expense.amount).toFixed(2)}</span>
+                        `;
+                        recentExpensesList.appendChild(item);
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
